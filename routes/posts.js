@@ -19,15 +19,14 @@ router.get("/upload", (req, res) => {
   res.render("postUpload");
 });
 router.get("/:id", (req, res) => {
-  res.render("post");
-  // db.posts
-  //   .findOne({
-  //     where: {
-  //       id: req.params.id,
-  //     },
-  //   })
-  //   .then((result) => {
-  //     res.send({ error: false, data: result });
-  //   });
+  db.posts
+    .findOne({
+      where: {
+        id: req.params.id,
+      },
+    })
+    .then((posts) => {
+      res.render("post");
+    });
 });
 module.exports = router;
