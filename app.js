@@ -8,9 +8,12 @@ const session = require("express-session");
 var passport = require("passport");
 var FacebookStrategy = require("passport-facebook").Strategy;
 var GoogleStrategy = require("passport-google-oauth2").Strategy;
-const loginFb = require("./loginFb.js");
+const login = require("./login.js");
 const config = require("./config/fbConfig.js");
 var db = require("./models");
+const multipart = require("connect-multiparty");
+const multipartMiddleware = multipart();
+const fs = require("fs");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var postsRouter = require("./routes/posts");
@@ -20,12 +23,13 @@ var app = express();
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+app.use(express.static("./public"));
 
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+
 app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -33,7 +37,42 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/", indexRouter);
 app.use("/posts", postsRouter);
 app.use("/users", usersRouter);
+app.post("/upload", multipartMiddleware, (req, res) => {
+  try {
+    fs.readFile(req.files.upload.path, function (err, data) {
+      var newPath = __dirname + "/public/images/" + req.files.upload.name;
+      fs.writeFile(newPath, data, function (err) {
+        if (err) console.log({ err: err });
+        else {
+          console.log(req.files.upload.originalFilename);
+          //     imgl = '/images/req.files.upload.originalFilename';
+          //     let img = "<script>window.parent.CKEDITOR.tools.callFunction('','"+imgl+"','ok');</script>";
+          //    res.status(201).send(img);
 
+          let fileName = req.files.upload.name;
+          let url = "/images/" + fileName;
+          let msg = "Upload successfully";
+          let funcNum = req.query.CKEditorFuncNum;
+          console.log({ url, msg, funcNum });
+
+          res
+            .status(201)
+            .send(
+              "<script>window.parent.CKEDITOR.tools.callFunction('" +
+                funcNum +
+                "','" +
+                url +
+                "','" +
+                msg +
+                "');</script>"
+            );
+        }
+      });
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
+});
 app.use(
   session({
     resave: false,
@@ -44,7 +83,13 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
-
+app.get("/private", (req, res) => {
+  if (req.isAuthenticated()) {
+    res.send("welcome to private page");
+  } else {
+    res.send("bạn chưa đăng nhập");
+  }
+});
 passport.use(
   new FacebookStrategy(
     {
@@ -55,7 +100,6 @@ passport.use(
     },
     function (accessToken, refreshToken, profile, done) {
       let user = {
-        fbId: profile._json.id,
         name: profile._json.name,
         email: profile._json.email,
       };
@@ -79,13 +123,28 @@ passport.use(
 passport.use(
   new GoogleStrategy(
     {
-      clientID:
-        "1066907954945-tm7na7m11g3f8lrn0rtkdpq2vh02c4p3.apps.googleusercontent.com",
-      clientSecret: "L7rqgVYIiKuovPNGtFOij6r8",
-      callbackURL: "http://localhost:1234/login/auth/gg/cb",
+      clientID: config.googleAuth.client_id,
+      clientSecret: config.googleAuth.client_secret,
+      callbackURL: config.googleAuth.callbackURL,
       passReqToCallback: true,
     },
     function (request, accessToken, refreshToken, profile, done) {
+      let user = {
+        name: profile._json.name,
+        email: profile._json.email,
+      };
+      db.users
+        .findOrCreate({
+          where: {
+            email: user.email,
+          },
+          defaults: user,
+        })
+        .then((result) => {
+          done(null, user);
+          console.log(result[0].dataValues);
+        })
+        .catch((err) => done(err));
       return done(null, profile);
     }
   )
@@ -99,7 +158,7 @@ passport.deserializeUser(function (user, done) {
   done(null, user);
 });
 
-app.use("/login", loginFb);
+app.use("/login", loginRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
@@ -119,19 +178,4 @@ app.listen(1234, () => {
   console.log("running on port 1234");
 });
 
-function isLoggedIn(req, res, next) {
-  req.user ? next() : res.sendStatus(401);
-}
-
 module.exports = app;
-// passport.serializeUser((user, done) => {
-//   done(null, user.id);
-// });
-// passport.deserializeUser((id, done) => {
-//   db.findOne({ id }, (err, user) => {
-//     if (err) {
-//       console.log("derserial");
-//     }
-//     done(null, user);
-//   });
-// });

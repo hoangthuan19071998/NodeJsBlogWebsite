@@ -1,9 +1,11 @@
 var express = require("express");
 var router = express.Router();
-const todosController = require("../controllers").todos;
+var db = require("../models");
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  res.render("home", { title: "Express" });
+  db.posts.findAll().then((posts) => {
+    res.render("home", { posts: posts });
+  });
 });
 
 module.exports = router;

@@ -57,6 +57,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-10 mx-auto col-sm-12 middle-section">
+          <% if (posts) { posts.forEach(post=>{%>
           <div class="row blog-box">
             <div
               class="col-md-6 col-sm-12 blog-img"
@@ -69,101 +70,23 @@
             <div class="col-md-6 col-sm-12 position-relative">
               <div class="ml-4 blog-content">
                 <a href="/post/work-at-a-modern-office-zznyq4"
-                  ><h3>Work at a Modern Office</h3></a
+                  ><h3><%= post.title%></h3></a
                 >
                 <p class="font-sm">
                   <span style="text-transform: uppercase" class="cat"
-                    ><i class="far fa-image mr-2"></i>ncaa</span
+                    ><i class="far fa-image mr-2"></i><%= post.authorId%></span
                   >
-                  - July 15, 2019
+                  - <%= post.createdAt%>
                 </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Aperiendum est igitur, quid sit voluptas; Quae iam oratio non
-                  a philosopho aliquo, sed a censore opprimenda est. Sin kakan
-                  malitiam dixisses, a...
-                </p>
-                <a href="/post/work-at-a-modern-office-zznyq4" class="link-blue"
+                <div><%- post.description%></div>
+
+                <a href="/post/<%= post.id %>" class="link-blue"
                   >Continue reading <i class="fas fa-chevron-right"></i
                 ></a>
               </div>
             </div>
           </div>
-          <div class="row blog-box">
-            <div
-              class="col-md-6 col-sm-12 blog-img"
-              style="
-                background-image: url('https://lh3.googleusercontent.com/JZ9O3fIbo9ThBcG2ltTKIF-ZHydRtDhshmIF-2-ChxU0Uego4kQVb_9OYzjs2p1qujuMrveCCF7vvp8Ifdf74_D5-08=s1080');
-              "
-            >
-              <a
-                href="/post/collection-of-cozy-rooms-interior-design-n0kous"
-              ></a>
-            </div>
-            <div class="col-md-6 col-sm-12 position-relative">
-              <div class="ml-4 blog-content">
-                <a href="/post/collection-of-cozy-rooms-interior-design-n0kous"
-                  ><h3>Collection of Cozy Rooms Interior Design</h3></a
-                >
-                <p class="font-sm">
-                  <span style="text-transform: uppercase" class="cat"
-                    ><i class="far fa-image mr-2"></i>nba</span
-                  >
-                  - July 15, 2019
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Aperiendum est igitur, quid sit voluptas; Quae iam oratio non
-                  a philosopho aliquo, sed a censore opprimenda est. Sin kakan
-                  malitiam dixisses, a...
-                </p>
-                <a
-                  href="/post/collection-of-cozy-rooms-interior-design-n0kous"
-                  class="link-blue"
-                  >Continue reading <i class="fas fa-chevron-right"></i
-                ></a>
-              </div>
-            </div>
-          </div>
-          <div class="row blog-box">
-            <div
-              class="col-md-6 col-sm-12 blog-img"
-              style="
-                background-image: url('https://lh3.googleusercontent.com/T7CZDt25QX5VjKw6LSIJuhQGIwzKfup54f1S1Q2XbaokY2mUxWCXouqYyDYxXxT1QBKcXg9UYu9XRbXEwX4nZWr0=s1080');
-              "
-            >
-              <a
-                href="/post/things-your-favorite-clothing-store-doesnt-tell-you-6r4pv5"
-              ></a>
-            </div>
-            <div class="col-md-6 col-sm-12 position-relative">
-              <div class="ml-4 blog-content">
-                <a
-                  href="/post/things-your-favorite-clothing-store-doesnt-tell-you-6r4pv5"
-                  ><h3>
-                    Things your Favorite Clothing Store Doesn’t Tell You
-                  </h3></a
-                >
-                <p class="font-sm">
-                  <span style="text-transform: uppercase" class="cat"
-                    ><i class="far fa-image mr-2"></i>ncaa</span
-                  >
-                  - July 15, 2019
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Aperiendum est igitur, quid sit voluptas; Quae iam oratio non
-                  a philosopho aliquo, sed a censore opprimenda est. Sin kakan
-                  malitiam dixisses, a...
-                </p>
-                <a
-                  href="/post/things-your-favorite-clothing-store-doesnt-tell-you-6r4pv5"
-                  class="link-blue"
-                  >Continue reading <i class="fas fa-chevron-right"></i
-                ></a>
-              </div>
-            </div>
-          </div>
+          <% }) } %>
         </div>
       </div>
     </div>

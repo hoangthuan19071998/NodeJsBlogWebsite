@@ -7,11 +7,14 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
+    <!-- Compiled and minified CSS -->
     <link
       rel="stylesheet"
-      type="text/css"
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <style>
       .card:hover {
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19),
@@ -27,31 +30,82 @@
         <a id="logo-container" href="#" class="brand-logo"
           >Node Authentication</a
         >
-        <a href="/logout" class="right">Logout</a>
+        <a href="/login/clearCookie" class="right">Clear cookie</a>
+        <a href="/login/logout" class="right">Logout</a>
       </div>
     </nav>
-    <div class="section no-pad-bot" id="index-banner">
-      <div class="container">
-        <br /><br />
-        <div class="row center">
-          <div class="col s12">
-            <div class="card">
-              <div class="card-content blue lighten-3">
-                <span class="card-title white-text"
-                  ><strong
-                    ><i class="large material-icons">person</i>
-                  </strong></span
-                >
+    <div class="row center">
+      <div class="col s12">
+        <div class="row">
+          <form class="col s12" action="/users/update" method="post">
+            <div class="row">
+              <div class="input-field col s6">
+                <i class="material-icons prefix">account_circle</i>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  class="validate"
+                  value="<%= user.name %>"
+                />
+                <label for="icon_prefix">Display Name</label>
               </div>
-              <div class="card-action">
-                <% if (user) { console.log(user) } %>
-                <h5><b><%= user.name %></b></h5>
-                <p><strong>Facebook id</strong>: <%= user.id %></p>
-                <p><strong>Google id</strong>: <%= user.sub %></p>
-                <p><strong>Email</strong>: <%= user.email %></p>
+              <div class="input-field col s6">
+                <i class="material-icons prefix">mail</i>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  class="validate"
+                  readonly="readonly"
+                  value="<%= user.email %>"
+                />
+                <label for="icon_telephone">Email</label>
+              </div>
+              <div class="input-field col s6">
+                <i class="material-icons prefix">local_phone</i>
+                <input
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  type="tel"
+                  class="validate"
+                  value="<%= user.phoneNumber %>"
+                />
+                <label for="icon_telephone">Phone number</label>
+              </div>
+              <div class="input-field col s6">
+                <label for="job">Job</label>
+                <select
+                  id="job"
+                  name="job"
+                  class="browser-default"
+                  value="<%=user.job%>"
+                  style="margin-left: 41px"
+                >
+                  <option value="null" disabled selected>
+                    Choose your current job
+                  </option>
+                  <option value="student">Student</option>
+                  <option value="teacher">Teacher</option>
+                  <option value="">Other</option>
+                </select>
+              </div>
+              <div class="input-field col s12">
+                <input type="submit" value="submit" />
               </div>
             </div>
-          </div>
+          </form>
+          <script>
+            // const job = document.getElementById("job");
+            // const jobInput = document.getElementById("job_input");
+            // job.addEventListener("change", () => {
+            //   if (job.value == "") {
+            //     jobInput.classList.remove("hide");
+            //   } else {
+            //     jobInput.classList.add("hide");
+            //   }
+            // });
+          </script>
         </div>
       </div>
     </div>

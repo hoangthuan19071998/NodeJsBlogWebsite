@@ -33,5 +33,25 @@ router.post("/", function (req, res) {
     res.send({ error: false, data: result, message: "Create success" });
   });
 });
-
+router.post("/update", (req, res) => {
+  let user = req.body;
+  if (user.phoneNumber == "" || user.job == "") {
+    return res.end("Phone number or job is not allowed to be null");
+  }
+  db.users
+    .update(
+      { name: user.name, phoneNumber: user.phoneNumber, job: user.job },
+      {
+        where: {
+          email: user.email,
+        },
+      }
+    )
+    .then((result) => {
+      res.redirect("/");
+    })
+    .catch((err) => {
+      res.end("có lỗi");
+    });
+});
 module.exports = router;
