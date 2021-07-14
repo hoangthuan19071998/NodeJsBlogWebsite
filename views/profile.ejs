@@ -1,28 +1,4 @@
-<!- profile.ejs->
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Facebook Node Authentication</title>
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
-    <!-- Compiled and minified CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
-    />
-
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <style>
-      .card:hover {
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19),
-          0 6px 6px rgba(0, 0, 0, 0.23);
-        margin-bottom: 54px;
-      }
-    </style>
-  </head>
+<%- include('header'); -%>
 
   <body>
     <nav class="light-blue lighten-1" role="navigation">
@@ -95,19 +71,15 @@
               </div>
             </div>
           </form>
-          <script>
-            // const job = document.getElementById("job");
-            // const jobInput = document.getElementById("job_input");
-            // job.addEventListener("change", () => {
-            //   if (job.value == "") {
-            //     jobInput.classList.remove("hide");
-            //   } else {
-            //     jobInput.classList.add("hide");
-            //   }
-            // });
-          </script>
         </div>
       </div>
     </div>
+    <style>
+      .card:hover {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19),
+          0 6px 6px rgba(0, 0, 0, 0.23);
+        margin-bottom: 54px;
+      }
+    </style>
   </body>
 </html>

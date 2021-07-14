@@ -1,11 +1,17 @@
 var express = require("express");
 var router = express.Router();
 var db = require("../models");
+const users = require("../models/users");
 //get all
 router.get("/", function (req, res, next) {
-  db.posts.findAll().then((results) => {
-    res.render("home", { data: results, title: "Trang chủ" });
-  });
+  db.posts
+    .findAll({
+      include: ["author"],
+    })
+    .then((posts) => {
+      console.log(posts);
+      res.render("home", { data: posts, title: "Trang chủ" });
+    });
 });
 // create
 router.post("/", function (req, res) {
@@ -18,15 +24,29 @@ router.post("/", function (req, res) {
 router.get("/upload", (req, res) => {
   res.render("postUpload");
 });
+
 router.get("/:id", (req, res) => {
   db.posts
     .findOne({
       where: {
         id: req.params.id,
       },
+      include: ["author"],
     })
     .then((posts) => {
-      res.render("post");
+      res.render("post", { posts: posts });
+    });
+});
+router.get("/user/:id", (req, res) => {
+  db.posts
+    .findAll({
+      where: {
+        authorId: req.params.id,
+      },
+      include: ["author"],
+    })
+    .then((posts) => {
+      res.render("userBlog", { posts: posts, userId: req.cookies["user"] });
     });
 });
 module.exports = router;

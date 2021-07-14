@@ -8,15 +8,24 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      // posts.hasMany(models.like, {
+      //   foreignKey: "productId",
+      //   sourceKey: "id",
+      //   as: "comments",
+      // });
+      posts.belongsTo(models.users, {
+        foreignKey: "authorId",
+        sourceKey: "id",
+        as: "author",
+      });
     }
   }
   posts.init(
     {
       title: DataTypes.STRING,
-      description: DataTypes.STRING,
       content: DataTypes.STRING,
-      isPublic: DataTypes.BOOLEAN,
+      description: DataTypes.STRING,
+      image: DataTypes.STRING,
       authorId: DataTypes.NUMBER,
     },
     {

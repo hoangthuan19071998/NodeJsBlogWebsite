@@ -1,98 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>The (K) Feature</title>
-    <meta name="description" content="" />
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-
-    <link
-      rel="icon"
-      href="https://lh3.googleusercontent.com/BB0PMpu0m_DXBgreKRK_GBhTECtxp0M7eyuOdSjdBqqqZKMIEkdtwXsm1-GVAeuqVeTwZeaVcRoIqDkwIV518qP1=s32-c"
-      type="image/png"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,500,600,700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
-      crossorigin="anonymous"
-    />
-    <link
-      href="https://cdn.turbo360-vertex.com/blog-tutorial-mv3m1d/public/dist/css/style.min.css"
-      rel="stylesheet"
-    />
-  </head>
+<%- include('header'); -%>
 
   <body>
     <div class="about-page" id="vertex-container">
-      <section class="smart-scroll">
-        <nav class="navbar navbar-expand-md navbar-light">
-          <a class="d-md-none navbar-brand heading-black" href="/">
-            <img
-              class="img-logo"
-              src="https://lh3.googleusercontent.com/HuIRLHuScbAkfYUeYBGeczSPnhnGEamaQoidz9ohkkm6PkPxYUiOD6XI3oryNNdgMveIEzAR4GZkSa6TEPR89D0l=s320"
-            />
-          </a>
-          <button
-            class="navbar-toggler navbar-toggler-right border-0"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarCollapse"
-            aria-controls="navbarCollapse"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <i class="fa fa-bars"></i>
-          </button>
-          <div class="collapse navbar-collapse nav-wrapper" id="navbarCollapse">
-            <div class="container-fluid header-nav" id="header-nav">
-              <ul class="head-nav text-center mb-0">
-                <li class="nav-item">
-                  <a class="nav-link" href="/">Home</a>
-                </li>
-
-                <li class="nav-item">
-                  <a class="nav-link" href="/posts?category=health">health</a>
-                </li>
-
-                <li class="nav-item">
-                  <a class="nav-link" href="/posts?category=fashion">fashion</a>
-                </li>
-
-                <li class="nav-item">
-                  <a class="nav-link" href="/posts?category=travel">travel</a>
-                </li>
-
-                <li class="nav-item">
-                  <a class="nav-link" href="/posts?category=business"
-                    >business</a
-                  >
-                </li>
-
-                <li class="nav-item">
-                  <a class="nav-link" href="/about">About</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </nav>
-      </section>
+      <%- include('menu'); -%>
 
       <div class="container">
         <div class="row">
           <div class="contact col-md-12">
-            <form action="/posts" method="post">
+            <form action="/posts" method="post" >
               <div class="row mt-4">
                 <div class="col-md-4">
                   <label> TITLE </label>
@@ -154,12 +69,26 @@
                   ></textarea>
                 </div>
               </div>
+              <div class="col-md-12">
+                <label> Image </label>
+                <form action="/uploadImage" method="POST" enctype="multipart/form-data">
+                  <div class="form-group">
+                    <input
+                     type="file"
+                      name="image"
+                      id="image"  
+                    />
+                    <input type="submit" value="Upload Image">
+                  </div>
+                </form>
+               
+              </div>
 
               <div class="col-md-12">
                 <input
                   type="submit"
                   id="submit"
-                  value="Post"
+                  value="Post Blog"
                   class="btn btn-primary btn-submit"
                 />
               </div>

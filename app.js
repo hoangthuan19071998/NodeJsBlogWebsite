@@ -14,29 +14,37 @@ var db = require("./models");
 const multipart = require("connect-multiparty");
 const multipartMiddleware = multipart();
 const fs = require("fs");
+
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var postsRouter = require("./routes/posts");
-var loginRouter = require("./routes/login");
+var loginRouter = require("./login");
+var uploadImage = require("./routes/uploadImage");
 // const passport = require("passport");
 var app = express();
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
-app.use(express.static("./public"));
+app.use(express.static("public"));
 
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
+app.use(
+  session({
+    resave: false,
+    saveUninitialized: true,
+    secret: "SECRET",
+  })
+);
 app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use("/", indexRouter);
 app.use("/posts", postsRouter);
 app.use("/users", usersRouter);
+app.use("/uploadImage", uploadImage);
 app.post("/upload", multipartMiddleware, (req, res) => {
   try {
     fs.readFile(req.files.upload.path, function (err, data) {
@@ -45,10 +53,6 @@ app.post("/upload", multipartMiddleware, (req, res) => {
         if (err) console.log({ err: err });
         else {
           console.log(req.files.upload.originalFilename);
-          //     imgl = '/images/req.files.upload.originalFilename';
-          //     let img = "<script>window.parent.CKEDITOR.tools.callFunction('','"+imgl+"','ok');</script>";
-          //    res.status(201).send(img);
-
           let fileName = req.files.upload.name;
           let url = "/images/" + fileName;
           let msg = "Upload successfully";
@@ -73,13 +77,7 @@ app.post("/upload", multipartMiddleware, (req, res) => {
     console.log(error.message);
   }
 });
-app.use(
-  session({
-    resave: false,
-    saveUninitialized: true,
-    secret: "SECRET",
-  })
-);
+
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -99,6 +97,7 @@ passport.use(
       profileFields: ["email", "displayName", "locale", "gender"],
     },
     function (accessToken, refreshToken, profile, done) {
+      console.log(user);
       let user = {
         name: profile._json.name,
         email: profile._json.email,
@@ -115,7 +114,6 @@ passport.use(
           console.log(result[0].dataValues);
         })
         .catch((err) => done(err));
-      return done(null, profile);
     }
   )
 );
@@ -133,6 +131,7 @@ passport.use(
         name: profile._json.name,
         email: profile._json.email,
       };
+      console.log(user);
       db.users
         .findOrCreate({
           where: {
@@ -145,7 +144,6 @@ passport.use(
           console.log(result[0].dataValues);
         })
         .catch((err) => done(err));
-      return done(null, profile);
     }
   )
 );

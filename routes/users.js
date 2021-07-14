@@ -3,36 +3,51 @@ var router = express.Router();
 var db = require("../models");
 /* GET users listing. */
 
-router.get("/", (req, res) =>
-  res.status(200).send({
-    message: "Welcome to the Todos API!",
-  })
-);
-router.get("/login", (req, res) => {
+router.post("/login", (req, res) => {
   let user = {
     email: req.body.email,
     name: req.body.name,
-    fbId: req.body.fbId,
   };
   db.users
     .findOrCreate({
       where: {
-        email: req.body.email,
+        email: user.email,
       },
       defaults: user,
     })
     .then((result) => {
-      res.send(result[0]);
+      res.cookie("user", result[0].id);
+      res.redirect("/users/profile/" + result[0].id);
     })
     .catch((err) => res.send(err));
 });
 
-router.post("/", function (req, res) {
-  let form = req.body;
-  db.users.create(form).then((result) => {
-    res.send({ error: false, data: result, message: "Create success" });
-  });
+router.get("/profile/:id", function (req, res) {
+  db.users
+    .findOne({
+      where: {
+        id: req.params.id,
+      },
+    })
+    .then((user) => {
+      console.log(user);
+      let info = user.dataValues;
+      if (info.phoneNumber == null || info.job == null) {
+        res.render("profile", {
+          user: info,
+        });
+      } else {
+        res.redirect("/private");
+      }
+    });
 });
+
+// router.post("/", function (req, res) {
+//   let form = req.body;
+//   db.users.create(form).then((result) => {
+//     res.send({ error: false, data: result, message: "Create success" });
+//   });
+// });
 router.post("/update", (req, res) => {
   let user = req.body;
   if (user.phoneNumber == "" || user.job == "") {

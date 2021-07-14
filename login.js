@@ -2,6 +2,9 @@ const passport = require("passport");
 const express = require("express");
 var router = express.Router();
 var db = require("./models");
+router.get("/", (req, res) => {
+  res.render("login");
+});
 router.get("/profile", isLoggedIn, function (req, res) {
   db.users
     .findOne({
@@ -19,13 +22,6 @@ router.get("/profile", isLoggedIn, function (req, res) {
         res.redirect("/");
       }
     });
-});
-router.get("clearCookie", (req, res) => {
-  res.clearCookie("cookie");
-  res.end("clear");
-});
-router.get("/error", isLoggedIn, function (req, res) {
-  res.render("error");
 });
 
 router.get("/auth/fb", passport.authenticate("facebook", { scope: ["email"] }));
