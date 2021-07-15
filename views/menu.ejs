@@ -1,4 +1,11 @@
 <div class="right">
+  <% if(userId){ %>
+  <a
+    href="/login/logout"
+    class="waves-effect waves-light btn-large right danger"
+    >Logout</a
+  >
+  <% }else{ %>
   <a href="/login/auth/fb" class="waves-effect waves-light btn-large right"
     >Facebook</a
   >
@@ -6,6 +13,7 @@
     >Google</a
   >
   <a href="/login" class="waves-effect waves-light btn-large right">Login</a>
+  <% } %>
 </div>
 <section class="smart-scroll">
   <div class="container">
@@ -17,9 +25,9 @@
       </a>
     </div>
   </div>
-  <nav class="navbar navbar-expand-md navbar-light">
+  <nav class="navbar navbar-expand-md navbar-light cyan lighten-5">
     <a class="d-md-none navbar-brand heading-black" href="/">
-      <img class="img-logo" src="logo.jpg" />
+      <img class="img-logo" src="/images/logo.jpg" />
     </a>
     <button
       class="navbar-toggler navbar-toggler-right border-0"
@@ -44,7 +52,9 @@
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="">Your Profile</a>
+            <a class="nav-link" href="/users/profile/<%=userId%>"
+              >Your Profile</a
+            >
           </li>
 
           <li class="nav-item">

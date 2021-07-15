@@ -20,8 +20,39 @@ var usersRouter = require("./routes/users");
 var postsRouter = require("./routes/posts");
 var loginRouter = require("./login");
 var uploadImage = require("./routes/uploadImage");
-// const passport = require("passport");
+var likeFunction = require("./routes/like");
+
+// server side
+var express = require("express");
 var app = express();
+var server = require("http").createServer(app);
+var io = require("socket.io")(server);
+io.on("connection", function (socket) {
+  socket.on("like", (info) => {
+    db.like.create(info).then((result) => {
+      socket.emit("isLiked", true);
+    });
+  });
+  socket.on("unlike", (info) => {
+    db.like
+      .destroy({
+        where: {
+          postid: info.postid,
+          uid: info.uid,
+        },
+      })
+      .then((result) => {
+        socket.emit("isLiked", false);
+      });
+  });
+});
+
+server.listen(1234, function () {
+  console.log("Node app is running on port 1234");
+});
+
+// const passport = require("passport");
+
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -77,8 +108,7 @@ app.post("/upload", multipartMiddleware, (req, res) => {
     console.log(error.message);
   }
 });
-
-
+app.use("/like", likeFunction);
 app.use(passport.initialize());
 app.use(passport.session());
 app.get("/private", (req, res) => {
@@ -172,8 +202,4 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
-app.listen(1234, () => {
-  console.log("running on port 1234");
-});
-
 module.exports = app;

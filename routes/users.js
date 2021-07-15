@@ -22,7 +22,7 @@ router.post("/login", (req, res) => {
     .catch((err) => res.send(err));
 });
 
-router.get("/profile/:id", function (req, res) {
+router.get("/profile/:id", isLoggedIn, function (req, res) {
   db.users
     .findOne({
       where: {
@@ -32,13 +32,11 @@ router.get("/profile/:id", function (req, res) {
     .then((user) => {
       console.log(user);
       let info = user.dataValues;
-      if (info.phoneNumber == null || info.job == null) {
-        res.render("profile", {
-          user: info,
-        });
-      } else {
-        res.redirect("/private");
-      }
+
+      res.render("profile", {
+        user: info,
+        userId: req.cookies["user"],
+      });
     });
 });
 
@@ -69,4 +67,26 @@ router.post("/update", (req, res) => {
       res.end("có lỗi");
     });
 });
+
+function isLoggedIn(req, res, next) {
+  let user = req.cookies["user"];
+  if (user) {
+    db.users
+      .findOne({
+        where: {
+          id: req.cookies["user"],
+        },
+      })
+      .then((user) => {
+        let info = user.dataValues;
+        if (info.phoneNumber == null || info.job == null) {
+          res.redirect("/user/profile" + user);
+        } else {
+          next();
+        }
+      });
+  } else {
+    res.redirect("/login");
+  }
+}
 module.exports = router;

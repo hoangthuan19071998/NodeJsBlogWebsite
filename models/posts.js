@@ -1,5 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
+const { post } = require("../routes/posts");
 module.exports = (sequelize, DataTypes) => {
   class posts extends Model {
     /**
@@ -8,15 +9,15 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // posts.hasMany(models.like, {
-      //   foreignKey: "productId",
-      //   sourceKey: "id",
-      //   as: "comments",
-      // });
       posts.belongsTo(models.users, {
-        foreignKey: "authorId",
-        sourceKey: "id",
+        foreignKey: "id",
+        sourceKey: "authorId",
         as: "author",
+      });
+      posts.hasMany(models.like, {
+        foreignKey: "postid",
+        sourceKey: "id",
+        as: "like",
       });
     }
   }
@@ -25,8 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       title: DataTypes.STRING,
       content: DataTypes.STRING,
       description: DataTypes.STRING,
-      image: DataTypes.STRING,
-      authorId: DataTypes.NUMBER,
+      authorId: DataTypes.STRING,
     },
     {
       sequelize,

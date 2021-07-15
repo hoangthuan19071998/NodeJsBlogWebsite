@@ -1,11 +1,12 @@
 <%- include('header'); -%>
+
 <body>
   <div class="homepage" id="vertex-container">
     <%- include('menu'); -%>
     <div class="container">
       <div class="row">
         <div class="col-md-10 mx-auto col-sm-12 middle-section">
-          <% if (posts) { posts.forEach(post=>{ %>
+        <% if (posts) { posts.forEach(post=>{ %>
           <div class="row blog-box">
             <div
               class="col-md-6 col-sm-12 blog-img"
@@ -13,19 +14,13 @@
                 background-image: url('https://lh3.googleusercontent.com/Az8O1joDKXlBimLQhApnTPMTNuFvLl6dCtykvvT1TonlExbPxRwVVpDBw4lrpo8z63m4_bzo-WOux4AHexIxPmlcXw=s1080');
               "
             >
-              <a href="/post/work-at-a-modern-office-zznyq4"></a>
+              <a href="/posts/<%= post.id %>"></a>
             </div>
             <div class="col-md-6 col-sm-12 position-relative">
               <div class="ml-4 blog-content">
-                <a href="/post/work-at-a-modern-office-zznyq4"
-                  ><h3><%= post.title%></h3></a
-                >
+                <a href="/posts/<%= post.id %>"><h3><%= post.title%></h3></a>
                 <p class="font-sm">
-                  <span class="cat"
-                    ><i class="far fa-image mr-2"></i><%=
-                    post.author.name%></span
-                  >
-                  - <%= post.createdAt%>
+                  <span class="cat"><i class="far fa-image mr-2"></i><%= post.author%></span>- <%= post.createdAt%>
                 </p>
                 <div><%- post.description%></div>
 
@@ -41,4 +36,4 @@
     </div>
   </div>
 </body>
-<%- include('footer'); -%>
+<%- include('footer'); -%> -->

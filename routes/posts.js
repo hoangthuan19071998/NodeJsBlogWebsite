@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var db = require("../models");
-const users = require("../models/users");
+
 //get all
 router.get("/", function (req, res, next) {
   db.posts
@@ -21,11 +21,14 @@ router.post("/", function (req, res) {
   });
   console.log(form);
 });
-router.get("/upload", (req, res) => {
-  res.render("postUpload");
+router.get("/upload", isLoggedIn, (req, res) => {
+  res.render("postUpload", {
+    userId: req.cookies["user"],
+  });
 });
 
 router.get("/:id", (req, res) => {
+  
   db.posts
     .findOne({
       where: {
@@ -34,7 +37,25 @@ router.get("/:id", (req, res) => {
       include: ["author"],
     })
     .then((posts) => {
-      res.render("post", { posts: posts });
+      db.like
+        .findAll({
+          where: {
+            postid: posts.id,
+          },
+          include: ["userLiked"],
+        })
+        .then((like) => {
+          res.send({
+            posts: posts,
+            userLike: like,
+            userId: req.cookies["user"],
+          });
+          // res.render("post", {
+          //   posts: posts,
+          //   userLike: like,
+          //   userId: req.cookies["user"],
+          // });
+        });
     });
 });
 router.get("/user/:id", (req, res) => {
@@ -49,4 +70,25 @@ router.get("/user/:id", (req, res) => {
       res.render("userBlog", { posts: posts, userId: req.cookies["user"] });
     });
 });
+function isLoggedIn(req, res, next) {
+  let user = req.cookies["user"];
+  if (user) {
+    db.users
+      .findOne({
+        where: {
+          id: req.cookies["user"],
+        },
+      })
+      .then((user) => {
+        let info = user.dataValues;
+        if (info.phoneNumber == null || info.job == null) {
+          res.redirect("/user/profile" + user);
+        } else {
+          next();
+        }
+      });
+  } else {
+    res.redirect("/login");
+  }
+}
 module.exports = router;

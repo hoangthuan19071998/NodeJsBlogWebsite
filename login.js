@@ -48,13 +48,10 @@ router.get(
 );
 
 router.get("/logout", (req, res) => {
+  res.clearCookie("user");
   req.logout();
   req.session.destroy();
   res.send("Goodbye!");
-});
-
-router.get("/auth/google/failure", (req, res) => {
-  res.send("Failed to authenticate..");
 });
 
 function isLoggedIn(req, res, next) {

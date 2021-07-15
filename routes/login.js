@@ -4,7 +4,7 @@ var router = express.Router();
 
 router.get("/profile", isLoggedIn, function (req, res) {
   res.render("profile", {
-    user: req.user, 
+    user: req.user,
   });
 });
 
@@ -28,7 +28,7 @@ router.get(
 );
 
 router.get("/logout", function (req, res) {
-  req.logout();
+  res.clearCookie("user");
   res.redirect("/");
 });
 

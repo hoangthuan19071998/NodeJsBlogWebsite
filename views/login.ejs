@@ -1,16 +1,16 @@
 <%- include('header'); -%>
 <body>
-    <div class="row">
+    <div class="" style="margin-left: 500px !important;margin-top: 100px;">
       <form class="col s12" action="/users/login" method="post">
         <div class="row">
           <div class="input-field col s6">
-            <input placeholder="name" id="name" name="name" type="text" class="validate">
+            <input placeholder="Name" id="name" name="name" type="text" class="validate col s4" >
             <label for="first_name">Display Name</label>
           </div>
         </div>
         <div class="row">
           <div class="input-field col s12">
-            <input id="email" type="email" name="email" class="validate">
+            <input id="email" type="email" name="email" class="validate  col s4">
             <label for="email">Email</label>
           </div>
         </div>
@@ -18,6 +18,16 @@
           <i class="material-icons right">send</i>
         </button>    
       </form>
+      <div class="col s12">
+        <h5>Hoặc đăng nhập bằng</h5>
+        <a href="/login/auth/fb" class="waves-effect waves-light btn-large"
+        >Facebook</a
+      >
+      <a href="/login/auth/gg" class="waves-effect waves-light btn-large"
+        >Google</a
+      >
     </div>
+      </div>
+    
   </body>
 </html>

@@ -1,5 +1,6 @@
 <%- include('header'); -%>
     <body>
+       
         <div class="blog-post" id="vertex-container">
             <%- include('menu'); -%>
             <div class="container">
@@ -10,7 +11,36 @@
                             <p class="font-sm text-center" style="font-size:16px">
                                 <span style="text-transform:uppercase;" class="cat"><i class="far fa-image mr-2"></i><%=posts.author.name%></span> - <%=posts.createdAt%>
                             </p>
-                            <p class="mt-5 mb-4"><img class="img-fluid" src="https://lh3.googleusercontent.com/Az8O1joDKXlBimLQhApnTPMTNuFvLl6dCtykvvT1TonlExbPxRwVVpDBw4lrpo8z63m4_bzo-WOux4AHexIxPmlcXw=s1080"/></p>
+                            <a class="waves-effect light-blue accent-2 btn hide" id="unlike"><i class="material-icons right">thumb_up</i>Like</a>
+                            <a class="waves-effect deep-purple lighten-5 btn" id="like"><i class="material-icons right">thumb_up</i>Like</a>
+                            <%if(userLike.length>2){
+                                %>
+                                <p class="blue-text text-darken-2 waves-effect btn green lighten-4" id="showlist"><%=userLike[0].userLiked[0].name%>,<%=userLike[1].userLiked[0].name%> and <%=userLike.length-2%> other people like this</p>
+                                <%
+                            }else{
+                                %>
+                                <div class="card blue-grey darken-1 white-text" id="listuser">
+                                    <% if (userLike) { 
+                                        userLike.forEach(user=>{
+                                            %>
+                                            <p><%= user.userLiked[0].name %></p>
+                                            <%
+                                        })} %>
+                                </div>
+                                <%
+                            }%>
+                            
+                
+
+                            
+                            <div class="card blue-grey darken-1 white-text hide" id="listuser">
+                                <% if (userLike) { 
+                                    userLike.forEach(user=>{
+                                        %>
+                                        <p><%= user.userLiked[0].name %></p>
+                                        <%
+                                    })} %>
+                            </div>
                             <div class="mt-5 post-text"><p><%-posts.content%></p></div>
                         </div>
 
@@ -19,5 +49,58 @@
                 </div>
             </div>
         </div>
+       
+<%
+%>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io();
+ 
+    const likeButton = document.getElementById("like")
+    const unlikeButton = document.getElementById("unlike")
+    likeButton.addEventListener('click',()=>{
+       likeButton.classList.add('hide')
+       unlikeButton.classList.remove('hide')
+       socket.emit(
+            "like",
+            {
+              postid:"<%=posts.id%>",
+              uid:"<%=userId%>",
+            }
+          );
+   
+    })
+    unlikeButton.addEventListener('click',(e)=>{
+       unlikeButton.classList.add('hide')
+       likeButton.classList.remove('hide')
+       socket.emit(
+            "unlike",
+            {
+              postid:"<%=posts.id%>",
+              uid:"<%=userId%>",
+            }
+          );
+    })
+    socket.on("isLiked",(message)=>{
+        const likeornot = document.createElement("p")
+        if(message){
+            alert('you liked this post')
+        }else{
+            alert('you unlike this post')
+        }
+    })
+    const showlist = document.getElementById("showlist");
+    const listuser = document.getElementById("listuser");
+    showlist.addEventListener("mouseover",()=>{
+        listuser.classList.remove("hide")
+    })
+    showlist.addEventListener("mouseout",()=>{
+        listuser.classList.add("hide")
+    })
+</script>
+<%
+%>
+       
+       
     </body>
 </html>
